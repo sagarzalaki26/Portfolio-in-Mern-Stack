@@ -1,19 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import {loadSkills} from '../Admin/Storage'
 
-const skills = [
-    { name: 'C', level: 65 },
-    { name: 'Java', level: 60 },
-    { name: 'Python', level: 65 },
-    { name: 'HTML', level: 90 },
-    { name: 'CSS', level: 80 },
-    { name: 'JavaScript', level: 60 },
-    {name:'React',level:50},
-    {name:'Node Js',level:30},
-    { name: 'Tailwind CSS', level: 80 },
-    { name: 'Bootstrap CSS', level: 70 },
-];
+// const skills = [
+//     { name: 'C', level: 65 },
+//     { name: 'Java', level: 60 },
+//     { name: 'Python', level: 65 },
+//     { name: 'HTML', level: 90 },
+//     { name: 'CSS', level: 80 },
+//     { name: 'JavaScript', level: 60 },
+//     {name:'React',level:50},
+//     {name:'Node Js',level:30},
+//     { name: 'Tailwind CSS', level: 80 },
+//     { name: 'Bootstrap CSS', level: 70 },
+
+
+// ];
+
+
 
 const Skills = () => {
+    const [skills,setskills]=useState([]);
+
+useEffect(()=>{
+    setskills(loadSkills());
+},[])
     return (
         <section id="skills" className="bg-gray-950" data-aos="fade-up">
             <div className='max-w-4xl mx-auto p-8 text-white'>
@@ -41,5 +51,6 @@ const Skills = () => {
         </section>
     );
 };
+
 
 export default Skills;

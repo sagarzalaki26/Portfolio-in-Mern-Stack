@@ -14,6 +14,7 @@ const Navbar = () => {
     { to: 'certificates', label: 'Certificates' },
     { to: 'projects', label: 'Projects' },
     { to: 'contact', label: 'Contact' },
+    
   ];
 
   return (
@@ -30,11 +31,12 @@ const Navbar = () => {
               to={link.to}
               smooth={true}
               duration={500}
-              className="cursor-pointer hover:text-blue-400"
+              className=" text-white text-xl cursor-pointer hover:text-blue-400"
             >
               {link.label}
             </Link>
           ))}
+          <Link className='border-2xl rounded-xl text-white text-xl p-1 bg-green-400 cursor-pointer hover:text-black'>Admin</Link>
         </div>
 
         <button
@@ -61,6 +63,8 @@ const Navbar = () => {
               {link.label}
             </Link>
           ))}
+           <Link to='login' className='border-green-400 cursor-pointer hover:text-blue-400'>Admin</Link>
+
         </div>
       )}
     </>

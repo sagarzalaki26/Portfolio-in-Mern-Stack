@@ -1,31 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaCertificate } from 'react-icons/fa';
+import { loadCertificates } from '../Admin/Storage';
 
-const certificateList = [
-    {
-        title: 'Web Development',
-        description:
-            'Certificate for completing Frontend Development with HTML, CSS, JavaScript.',
-        link: '#',
-    },
-    {
-        title: 'Java Programming',
-        description: 'Certificate for completing Java Programming course.',
-        link: '#',
-    },
-    {
-        title: 'C Programming',
-        description: 'Certificate for completing C Programming Fundamentals.',
-        link: '#',
-    },
-    {
-        title: 'Python Programming',
-        description: 'Certificate for completing Python Programming Fundamentals.',
-        link: '/images/Basics of python.pdf',
-    },
-];
+// const certificateList = [
+//     {
+//         title: 'Web Development',
+//         description:
+//             'Certificate for completing Frontend Development with HTML, CSS, JavaScript.',
+//         link: '#',
+//     },
+//     {
+//         title: 'Java Programming',
+//         description: 'Certificate for completing Java Programming course.',
+//         link: '#',
+//     },
+//     {
+//         title: 'C Programming',
+//         description: 'Certificate for completing C Programming Fundamentals.',
+//         link: '#',
+//     },
+//     {
+//         title: 'Python Programming',
+//         description: 'Certificate for completing Python Programming Fundamentals.',
+//         link: '/images/Basics of python.pdf',
+//     },
+// ];
 
 const Certificates = () => {
+    const[certificatesList,setcertificates]=useState([]);
+    useEffect(()=>{
+        setcertificates(loadCertificates());
+    },[]);
+
     return (
         <section
             id="certificates"
@@ -40,7 +46,7 @@ const Certificates = () => {
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {certificateList.map((cert, index) => (
+                    {certificatesList.map((cert, index) => (
                         <div
                             key={index}
                             className="bg-gray-800/70 backdrop-blur-sm p-6 rounded-lg shadow-xl transition-transform hover:scale-105"
