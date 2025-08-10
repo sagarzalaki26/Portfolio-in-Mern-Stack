@@ -1,20 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {loadSkills} from '../Admin/Storage'
-
-// const skills = [
-//     { name: 'C', level: 65 },
-//     { name: 'Java', level: 60 },
-//     { name: 'Python', level: 65 },
-//     { name: 'HTML', level: 90 },
-//     { name: 'CSS', level: 80 },
-//     { name: 'JavaScript', level: 60 },
-//     {name:'React',level:50},
-//     {name:'Node Js',level:30},
-//     { name: 'Tailwind CSS', level: 80 },
-//     { name: 'Bootstrap CSS', level: 70 },
-
-
-// ];
+import axios from 'axios';
 
 
 
@@ -22,7 +8,17 @@ const Skills = () => {
     const [skills,setskills]=useState([]);
 
 useEffect(()=>{
-    setskills(loadSkills());
+   const fetchskill=async()=>{
+    try{
+        const res=await axios.get("http://localhost:3001/fetchskill");
+        setskills(res.data);
+    }
+    catch(error){
+        console.error(error);
+    }
+   }
+
+   fetchskill();
 },[])
     return (
         <section id="skills" className="bg-gray-950" data-aos="fade-up">

@@ -1,86 +1,106 @@
-// src/components/Admin/ManageCertificates.jsx
-import React, { useEffect, useState } from 'react';
-import { loadCertificates, saveCertificates } from './storage';
-import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import React, { useState } from "react";
+import axios from "axios";
 
-const blank = { id: '', title: '', description: '', file: '' };
+const AddCertificateForm = () => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [link, setLink] = useState("");
+  const [message, setMessage] = useState("");
 
-export default function ManageCertificates() {
-  const [items, setItems] = useState([]);
-  const [form, setForm] = useState(blank);
-  const [editingId, setEditingId] = useState(null);
-  const [open, setOpen] = useState(false);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  useEffect(() => {
-    setItems(loadCertificates());
-  }, []);
+    if (!title.trim()) {
+      setMessage("Title is required.");
+      return;
+    }
 
-  const persist = (arr) => { setItems(arr); saveCertificates(arr); };
+    try {
+      const response = await axios.post("http://localhost:3001/certificate", {
+        title,
+        description,
+        link,
+      });
+            setMessage(response.data.message);
+            setTitle("");
+            setDescription('');
+            setLink('');
 
-  const add = () => {
-    if (!form.title.trim()) return alert('Title required');
-    const newItem = { ...form, id: Date.now().toString() };
-    persist([newItem, ...items]);
-    setForm(blank);
-    setOpen(false);
-  };
-
-  const update = () => {
-    const arr = items.map(i => i.id === editingId ? { ...i, ...form } : i);
-    persist(arr);
-    setEditingId(null);
-    setForm(blank);
-    setOpen(false);
-  };
-
-  const remove = (id) => {
-    if (!confirm('Delete certificate?')) return;
-    persist(items.filter(i => i.id !== id));
-  };
-
-  const startEdit = (it) => {
-    setEditingId(it.id);
-    setForm({ title: it.title, description: it.description, file: it.file });
-    setOpen(true);
+    } catch (error) {
+      setMessage("Error adding Certificate.");
+      console.error(error);
+    }
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h3 className="text-xl font-semibold">Manage Certificates</h3>
-        <button onClick={() => { setOpen(s => !s); setEditingId(null); setForm(blank); }} className="flex items-center gap-2 bg-blue-600 px-3 py-2 rounded">
-          <FaPlus /> <span>{open ? 'Close' : 'Add Certificate'}</span>
-        </button>
-      </div>
+    <div className="min-h-screen   bg-gray-950 px-4">
+      <div className="bg-gray-800 p-8 rounded-lg ml-10 mt-8 shadow-lg w-full max-w-md text-white">
+        <h2 className="text-2xl font-semibold mb-6 text-center">Add New Certificate</h2>
 
-      {open && (
-        <div className="bg-white/5 p-4 rounded">
-          <input value={form.title} onChange={(e) => setForm({...form, title: e.target.value})} placeholder="Certificate Title" className="w-full mb-2 px-3 py-2 rounded bg-gray-800 text-white" />
-          <input value={form.file} onChange={(e) => setForm({...form, file: e.target.value})} placeholder="File URL (optional)" className="w-full mb-2 px-3 py-2 rounded bg-gray-800 text-white" />
-          <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} placeholder="Short description" className="w-full mb-3 px-3 py-2 rounded bg-gray-800 text-white" rows="3" />
-          <div className="flex gap-2">
-            {editingId ? <button onClick={update} className="bg-yellow-600 px-4 py-2 rounded">Update</button> : <button onClick={add} className="bg-green-600 px-4 py-2 rounded">Save</button>}
-            <button onClick={() => { setOpen(false); setForm(blank); setEditingId(null); }} className="bg-gray-700 px-4 py-2 rounded">Cancel</button>
-          </div>
-        </div>
-      )}
+        {message && (
+          <p
+            className={`mb-6 text-center ${
+              message.toLowerCase().includes("error") ? "text-red-400" : "text-green-400"
+            }`}
+          >
+            {message}
+          </p>
+        )}
 
-      <div className="grid gap-4">
-        {items.length === 0 && <div className="text-sm opacity-70">No certificates yet.</div>}
-        {items.map(it => (
-          <div key={it.id} className="bg-white/5 p-4 rounded flex justify-between items-start">
-            <div>
-              <h4 className="font-semibold">{it.title}</h4>
-              <p className="text-sm opacity-80">{it.description}</p>
-              {it.file && <a href={it.file} target="_blank" rel="noreferrer" className="text-blue-400 text-sm">Open</a>}
-            </div>
-            <div className="flex gap-2">
-              <button onClick={() => startEdit(it)} className="px-3 py-1 bg-yellow-600 rounded"><FaEdit /></button>
-              <button onClick={() => remove(it.id)} className="px-3 py-1 bg-red-600 rounded"><FaTrash /></button>
-            </div>
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="block mb-1 font-medium" htmlFor="title">
+              Title <span className="text-red-500">*</span>
+            </label>
+            <input
+              id="title"
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+              className="w-full rounded-md border border-gray-600 bg-gray-900 px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Enter project title"
+            />
           </div>
-        ))}
+
+          <div>
+            <label className="block mb-1 font-medium" htmlFor="description">
+              Description
+            </label>
+            <textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full rounded-md border border-gray-600 bg-gray-900 px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              rows={4}
+              placeholder="Enter project description"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 font-medium" htmlFor="link">
+              Link
+            </label>
+            <input
+              id="link"
+              type="url"
+              value={link}
+              onChange={(e) => setLink(e.target.value)}
+              placeholder="https://example.com"
+              className="w-full rounded-md border border-gray-600 bg-gray-900 px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-indigo-600 hover:bg-indigo-700 transition-colors py-2 rounded-md font-semibold text-white"
+          >
+            Add Project
+          </button>
+        </form>
       </div>
     </div>
   );
-}
+};
+
+export default AddCertificateForm;

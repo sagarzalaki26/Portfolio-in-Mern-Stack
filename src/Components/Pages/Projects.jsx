@@ -4,52 +4,6 @@ import {
   FaProjectDiagram
 } from 'react-icons/fa';
 
-// const projects = [
-//     {
-//         icon: <FaHospital className="text-green-400" />
-//        // title: 'Hospital Website with Blog System',
-//        // description:
-//           //  'Developed a Hospital Website with an integrated Blog System to provide hospital information, manage services, and share health-related articles.',
-//         //link: 'https://github.com/sagarzalaki26/Phyioteraphy',
-//     },
-//     {
-//         icon: <FaUtensils className="text-green-400" />
-//         // title: 'Famous Foods of 5 States Website',
-//         // description:
-//         //     'Built a website featuring famous foods, ingredients, and cooking instructions for 5 states.',
-//         // link: 'https://github.com/sagarzalaki26/Spicies',
-//     },
-//     {
-//         icon: <FaAddressCard className="text-green-400" />,
-//         // title: 'My Portfolio',
-//         // description:
-//         //     'Designed and implemented a portfolio website to showcase technical skills and creativity.',
-//         // link: 'https://github.com/sagarzalaki26/Portfolio',
-//     },
-//     {
-//         icon: <FaCar className="text-green-400" />,
-//         // title: 'Car Game',
-//         // description:
-//         //     'Simple car game developed using C language with engaging gameplay mechanics.',
-//         // link: 'https://github.com/sagarzalaki26/cproject',
-//     },
-//     {
-//         icon: <FaMoneyBillWave className="text-green-400" />,
-//         // title: 'Payroll System',
-//         // description:
-//         //     'Comprehensive payroll management system developed in C++ with advanced features.',
-//         // link: 'https://github.com/sagarzalaki26/CPP-project',
-//     },
-//     {
-//         icon: <FaTheaterMasks className="text-green-400" />,
-//         // title: 'Theater Management',
-//         // description:
-//         //     'Theater ticket booking system using C++ with user-friendly interface.',
-//         // link: 'https://github.com/sagarzalaki26/CPP-project',
-//     },
-// ];
-
-
 
 
 const Projects = () => {

@@ -1,73 +1,81 @@
-// src/components/Admin/ManageSkills.jsx
-import React, { useEffect, useState } from 'react';
-import { loadSkills, saveSkills } from './storage';
-import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import React, { useState } from 'react';
+import axios from 'axios';
 
-export default function ManageSkills() {
-  const [skills, setSkills] = useState([]);
-  const [form, setForm] = useState({ name: '', level: 60 });
-  const [editingId, setEditingId] = useState(null);
+export default function AddSkillForm() {
+  const [name, setName] = useState('');
+  const [level, setLevel] = useState(60);
+  const [message, setMessage] = useState('');
 
-  useEffect(() => setSkills(loadSkills()), []);
-
-  const persist = (arr) => { setSkills(arr); saveSkills(arr); };
-
-  const add = () => {
-    if (!form.name.trim()) return alert('Skill name required');
-    const newSkill = { id: Date.now().toString(), ...form };
-    persist([newSkill, ...skills]);
-    setForm({ name: '', level: 60 });
-  };
-
-  const startEdit = (s) => {
-    setEditingId(s.id);
-    setForm({ name: s.name, level: s.level });
-  };
-
-  const update = () => {
-    persist(skills.map(s => s.id === editingId ? { ...s, ...form } : s));
-    setForm({ name: '', level: 50 });
-    setEditingId(null);
-  };
-
-  const remove = (id) => {
-    if (!confirm('Delete skill?')) return;
-    persist(skills.filter(s => s.id !== id));
+  const handleAddSkill = async (e) => {
+    e.preventDefault();
+    if (!name.trim()) {
+      setMessage('Skill name is required.');
+      return;
+    }
+    try {
+      const res = await axios.post('http://localhost:3001/skill', { name, level });
+      setMessage(res.data.message);
+      setName('');
+      setLevel(60);
+    } 
+    catch (error) {
+      console.error(error);
+    }
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h3 className="text-xl font-semibold">Manage Skills</h3>
-        <div className="flex gap-2">
-          <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Skill name" className="px-3 py-2 rounded bg-gray-800 text-white" />
-          <input type="number" value={form.level} onChange={(e) => setForm({ ...form, level: Number(e.target.value) })} min="0" max="100" className="w-24 px-3 py-2 rounded bg-gray-800 text-white placeholder:Skills in %" />
-          {editingId ? (
-            <button onClick={update} className="bg-yellow-600 px-3 py-2 rounded">Update</button>
-          ) : (
-            <button onClick={add} className="bg-green-600 px-3 py-2 rounded flex items-center gap-2"><FaPlus /> Add</button>
-          )}
-        </div>
-      </div>
+    <div className='max-h-s bg-black'>
+    <div className=" max-w-md p-6 bg-gray-800 rounded text-white">
+      <h2 className="text-2xl font-semibold mb-4">Add New Skill</h2>
+      {message && (
+        <p
+          className={`mb-4 ${
+            message.toLowerCase().includes('error') ? 'text-red-400' : 'text-green-400'
+          }`}
+        >
+          {message}
+        </p>
+      )}
 
-      <div className="space-y-3">
-        {skills.length === 0 && <div className="opacity-70">No skills added.</div>}
-        {skills.map(s => (
-          <div key={s.id} className="p-3 rounded bg-white/5 flex justify-between items-center">
-            <div>
-              <div className="font-semibold">{s.name}</div>
-              <div className="text-sm opacity-80">{s.level}%</div>
-              <div className="w-full bg-gray-700 h-2 rounded mt-2 overflow-hidden">
-                <div style={{ width: `${s.level}%` }} className="h-2 bg-green-500"></div>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <button onClick={() => startEdit(s)} className="px-3 py-1 bg-yellow-600 rounded"><FaEdit /></button>
-              <button onClick={() => remove(s.id)} className="px-3 py-1 bg-red-600 rounded"><FaTrash /></button>
-            </div>
-          </div>
-        ))}
-      </div>
+      <form onSubmit={handleAddSkill} className="space-y-4">
+        <div>
+          <label className="block mb-1 font-medium" htmlFor="name">
+            Skill Name <span className="text-red-500">*</span>
+          </label>
+          <input
+            id="name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Enter skill name"
+            className="w-full px-3 py-2 rounded bg-gray-900 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium" htmlFor="level">
+            Skill Level (%)
+          </label>
+          <input
+            id="level"
+            type="number"
+            value={level}
+            onChange={(e) => setLevel(Number(e.target.value))}
+            min="0"
+            max="100"
+            className="w-full px-3 py-2 rounded bg-gray-900 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-indigo-600 hover:bg-indigo-700 py-2 rounded font-semibold"
+        >
+          Add Skill
+        </button>
+      </form>
+    </div>
     </div>
   );
 }
