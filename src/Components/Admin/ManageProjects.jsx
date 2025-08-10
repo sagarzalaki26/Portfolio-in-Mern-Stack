@@ -1,102 +1,106 @@
-import React, { useEffect, useState } from 'react';
-import { loadProjects, saveProjects } from './storage';
-import { FaPlus, FaEdit, FaTrash, FaExternalLinkAlt } from 'react-icons/fa';
+import React, { useState } from "react";
+import axios from "axios";
 
-const blank = { id: '', title: '', description: '', link: '' };
+const AddProjectForm = () => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [link, setLink] = useState("");
+  const [message, setMessage] = useState("");
 
-export default function ManageProjects() {
-  const [projects, setProjects] = useState([]);
-  const [form, setForm] = useState(blank);
-  const [editingId, setEditingId] = useState(null);
-  const [showForm, setShowForm] = useState(false);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  useEffect(() => {
-    setProjects(loadProjects());
-  }, []);
+    if (!title.trim()) {
+      setMessage("Title is required.");
+      return;
+    }
 
-  const persist = (arr) => {
-    setProjects(arr);
-    saveProjects(arr);
-  };
+    try {
+      const response = await axios.post("http://localhost:3001/addproject", {
+        title,
+        description,
+        link,
+      });
+            setMessage(response.data.message);
+            setTitle("");
+            setDescription('');
+            setLink('');
 
-  const handleAdd = () => {
-    if (!form.title.trim()) return alert('Title required');
-    const newItem = { ...form, id: Date.now().toString() };
-    persist([newItem, ...projects]);
-    setForm(blank);
-    setShowForm(false);
-  };
-
-  const handleUpdate = () => {
-    const arr = projects.map((p) => (p.id === editingId ? { ...p, ...form } : p));
-    persist(arr);
-    setEditingId(null);
-    setForm(blank);
-    setShowForm(false);
-  };
-
-  const handleDelete = (id) => {
-    if (!confirm('Delete this project?')) return;
-    const arr = projects.filter((p) => p.id !== id);
-    persist(arr);
-  };
-
-  const startEdit = (p) => {
-    setEditingId(p.id);
-    setForm({ title: p.title, description: p.description, link: p.link });
-    setShowForm(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (error) {
+      setMessage("Error adding project.");
+      console.error(error);
+    }
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h3 className="text-xl font-semibold">Manage Projects</h3>
-        <div className="flex items-center gap-3">
-          <button onClick={() => { setShowForm((s) => !s); setEditingId(null); setForm(blank); }} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded">
-            <FaPlus /> <span>{showForm ? 'Close' : 'Add Project'}</span>
+    <div className="min-h-screen   bg-gray-950 px-4">
+      <div className="bg-gray-800 p-8 rounded-lg ml-10 mt-8 shadow-lg w-full max-w-md text-white">
+        <h2 className="text-2xl font-semibold mb-6 text-center">Add New Project</h2>
+
+        {message && (
+          <p
+            className={`mb-6 text-center ${
+              message.toLowerCase().includes("error") ? "text-red-400" : "text-green-400"
+            }`}
+          >
+            {message}
+          </p>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="block mb-1 font-medium" htmlFor="title">
+              Title <span className="text-red-500">*</span>
+            </label>
+            <input
+              id="title"
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+              className="w-full rounded-md border border-gray-600 bg-gray-900 px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Enter project title"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 font-medium" htmlFor="description">
+              Description
+            </label>
+            <textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full rounded-md border border-gray-600 bg-gray-900 px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              rows={4}
+              placeholder="Enter project description"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 font-medium" htmlFor="link">
+              Link
+            </label>
+            <input
+              id="link"
+              type="url"
+              value={link}
+              onChange={(e) => setLink(e.target.value)}
+              placeholder="https://example.com"
+              className="w-full rounded-md border border-gray-600 bg-gray-900 px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-indigo-600 hover:bg-indigo-700 transition-colors py-2 rounded-md font-semibold text-white"
+          >
+            Add Project
           </button>
-        </div>
-      </div>
-
-      {showForm && (
-        <div className="bg-white/5 p-4 rounded shadow">
-          <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Project title" className="w-full mb-2 px-3 py-2 rounded bg-gray-800 text-white" />
-          <input value={form.link} onChange={(e) => setForm({ ...form, link: e.target.value })} placeholder="Project link (github/site)" className="w-full mb-2 px-3 py-2 rounded bg-gray-800 text-white" />
-          <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Short description" rows="3" className="w-full mb-3 px-3 py-2 rounded bg-gray-800 text-white"></textarea>
-          <div className="flex gap-2">
-            {editingId ? (
-              <button onClick={handleUpdate} className="bg-yellow-600 px-4 py-2 rounded">Update</button>
-            ) : (
-              <button onClick={handleAdd} className="bg-green-600 px-4 py-2 rounded">Save</button>
-            )}
-            <button onClick={() => { setShowForm(false); setForm(blank); setEditingId(null); }} className="bg-gray-700 px-4 py-2 rounded">Cancel</button>
-          </div>
-        </div>
-      )}
-
-      <div className="grid gap-4">
-        {projects.length === 0 && <div className="text-sm opacity-70">No projects added yet.</div>}
-
-        {projects.map((p) => (
-          <div key={p.id} className="bg-white/5 p-4 rounded flex flex-col md:flex-row md:justify-between md:items-start gap-4">
-            <div>
-              <h4 className="font-semibold text-lg">{p.title}</h4>
-              <p className="text-sm opacity-80 mb-2">{p.description}</p>
-              {p.link && (
-                <a href={p.link} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-blue-400 text-sm">
-                  View <FaExternalLinkAlt className="text-xs" />
-                </a>
-              )}
-            </div>
-
-            <div className="flex gap-2">
-              <button onClick={() => startEdit(p)} className="px-3 py-1 bg-yellow-600 rounded flex items-center gap-2"><FaEdit /> Edit</button>
-              <button onClick={() => handleDelete(p.id)} className="px-3 py-1 bg-red-600 rounded flex items-center gap-2"><FaTrash /> Delete</button>
-            </div>
-          </div>
-        ))}
+        </form>
       </div>
     </div>
   );
-}
+};
+
+export default AddProjectForm;

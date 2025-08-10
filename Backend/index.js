@@ -7,6 +7,7 @@ app.use(express.json());
 app.use(cors());
 
 const Employeemodel = require('./model/employee');
+const Projectmodel=require('./model/project')
 
 mongoose.connect("mongodb://127.0.0.1:27017/employee")
   .then(() => console.log("MongoDB connected"))
@@ -33,6 +34,41 @@ mongoose.connect("mongodb://127.0.0.1:27017/employee")
       res.status(500).json("Internal server error");
     });
  }) ;
+
+//Projects
+
+//Adding projects
+ app.post('/addproject',async(req,res)=>{
+  try{
+  const {title,description,link}=req.body;
+
+
+  const newProject=new Projectmodel({title,description,link});
+  await newProject.save();
+
+  res.status(201).json({message:"Project added successfully."});
+
+  }
+  catch(error){
+    console.error(error)
+  }
+
+ });
+
+ //Fetching projects
+
+ app.get('/projects' ,async(req,res)=>{
+  try{
+    const projects=await Projectmodel.find().sort({createdAt:-1});
+    res.json(projects);
+
+
+  }
+  catch(error){
+    console.error(error);
+  }
+
+ })
 
 
 

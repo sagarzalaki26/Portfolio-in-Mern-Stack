@@ -1,8 +1,8 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import {
   FaProjectDiagram
 } from 'react-icons/fa';
-import { loadProjects } from '../Admin/Storage';
 
 // const projects = [
 //     {
@@ -49,12 +49,25 @@ import { loadProjects } from '../Admin/Storage';
 //     },
 // ];
 
+
+
+
 const Projects = () => {
     const [projects,setProjects]=useState([]);
+    
     useEffect(()=>{
-            const savedProjects = JSON.parse(localStorage.getItem("projects")) || [];
 
-        setProjects(savedProjects);
+        const fetchProjects=async()=>{
+            try{
+            const res=await axios.get('http://localhost:3001/projects');
+            setProjects(res.data);
+            }
+        
+        catch(error){
+            console.error(error);
+        }
+    }
+    fetchProjects();
     },[])
     return (
         <section id="projects" className=" bg-gray-950" data-aos="fade-up">
