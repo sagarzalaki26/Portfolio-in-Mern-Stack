@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-scroll';
 import { FaBars } from 'react-icons/fa';
+import{Link as Scrollink } from 'react-scroll'
+import { useNavigate,Link as Routerlink} from 'react-router-dom';
 
 const Navbar = () => {
+
+  const navigate=useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
@@ -26,17 +29,21 @@ const Navbar = () => {
 
         <div className="hidden md:flex space-x-6">
           {navLinks.map((link) => (
-            <Link
+            <Scrollink
               key={link.to}
               to={link.to}
-              smooth={true}
+                smooth={true} 
+                  offset={-70}
               duration={500}
               className=" text-white text-xl cursor-pointer hover:text-blue-400"
             >
               {link.label}
-            </Link>
+            </Scrollink>
           ))}
-          <Link className='border-2xl rounded-xl text-white text-xl p-1 bg-green-400 cursor-pointer hover:text-black'>Admin</Link>
+          <button onClick={()=>{
+            navigate("/login")
+          }} className='border-2xl rounded-xl text-white text-xl p-1 bg-green-400 cursor-pointer hover:text-black'>Admin</button>
+       
         </div>
 
         <button
@@ -50,20 +57,20 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden flex flex-col bg-gray-800/95 backdrop-blur-sm shadow-lg absolute w-full mt-16 p-4 space-y-4 z-10">
+        <div className="md:hidden flex flex-col bg-gray-800/95 backdrop-blur-sm shadow-lg text-white absolute w-full mt-16 p-4 space-y-4 z-10">
           {navLinks.map((link) => (
-            <Link
+            <Scrollink
               key={link.to}
               to={link.to}
-              smooth={true}
               duration={500}
               onClick={toggleMenu}
               className="cursor-pointer hover:text-blue-400 py-2"
             >
               {link.label}
-            </Link>
+            </Scrollink>
           ))}
-           <Link to='login' className='border-green-400 cursor-pointer hover:text-blue-400'>Admin</Link>
+           <Routerlink to="/login"
+           className='border-green-400 cursor-pointer hover:text-blue-400'>Admin</Routerlink>
 
         </div>
       )}

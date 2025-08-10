@@ -18,7 +18,7 @@ export default function Dashboard({ onLogout }) {
     };
 
     return (
-        <div className="min-h-screen bg-gray-900 text-white">
+        <div id='' className="min-h-screen bg-gray-900 text-white">
             {/* Topbar for mobile */}
             <header className="md:hidden flex items-center justify-between p-4 border-b border-gray-800">
                 <div className="flex items-center gap-3">

@@ -52,7 +52,9 @@ import { loadProjects } from '../Admin/Storage';
 const Projects = () => {
     const [projects,setProjects]=useState([]);
     useEffect(()=>{
-        setProjects(loadProjects());
+            const savedProjects = JSON.parse(localStorage.getItem("projects")) || [];
+
+        setProjects(savedProjects);
     },[])
     return (
         <section id="projects" className=" bg-gray-950" data-aos="fade-up">
