@@ -18,6 +18,11 @@ mongoose.connect("mongodb+srv://sagarzalaki26:Sagar262004@cluster0.o5t3eba.mongo
 
 
   //Login Page
+  app.get('/', (req,res) =>{
+    res.send("Hello World");
+  })
+
+
   app.post('/login', (req, res)=>{
   const {email,password}=req.body;
   Employeemodel.findOne({email:email})
