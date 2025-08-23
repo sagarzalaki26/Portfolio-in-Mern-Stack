@@ -12,7 +12,7 @@ const Skillmodel=require('./model/skill');
 
 const Certificatemodel=require('./model/certificate');
 
-mongoose.connect("mongodb+srv://sagarzalaki26:Sagar262004@cluster0.o5t3eba.mongodb.net/Admin")
+mongoose.connect("mongodb+srv://sagarzalaki26:Sagar262004@cluster0.o5t3eba.mongodb.net/Sagar")
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.log("DB error", err));
 
