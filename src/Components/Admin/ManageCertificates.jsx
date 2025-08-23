@@ -21,26 +21,30 @@ const AddCertificateForm = () => {
         description,
         link,
       });
-            setMessage(response.data.message);
-            setTitle("");
-            setDescription('');
-            setLink('');
 
+      setMessage(response.data.message || "Certificate added successfully!");
+      setTitle("");
+      setDescription("");
+      setLink("");
     } catch (error) {
-      setMessage("Error adding Certificate.");
+      setMessage("Error adding certificate.");
       console.error(error);
     }
   };
 
   return (
-    <div className="min-h-screen   bg-gray-950 px-4">
-      <div className="bg-gray-800 p-8 rounded-lg ml-10 mt-8 shadow-lg w-full max-w-md text-white">
-        <h2 className="text-2xl font-semibold mb-6 text-center">Add New Certificate</h2>
+    <div className="min-h-screen bg-gray-950 px-4 flex justify-center items-center">
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md text-white">
+        <h2 className="text-2xl font-semibold mb-6 text-center">
+          Add New Certificate
+        </h2>
 
         {message && (
           <p
             className={`mb-6 text-center ${
-              message.toLowerCase().includes("error") ? "text-red-400" : "text-green-400"
+              message.toLowerCase().includes("error")
+                ? "text-red-400"
+                : "text-green-400"
             }`}
           >
             {message}
@@ -48,6 +52,7 @@ const AddCertificateForm = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Title */}
           <div>
             <label className="block mb-1 font-medium" htmlFor="title">
               Title <span className="text-red-500">*</span>
@@ -59,10 +64,11 @@ const AddCertificateForm = () => {
               onChange={(e) => setTitle(e.target.value)}
               required
               className="w-full rounded-md border border-gray-600 bg-gray-900 px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="Enter project title"
+              placeholder="Enter certificate title"
             />
           </div>
 
+          {/* Description */}
           <div>
             <label className="block mb-1 font-medium" htmlFor="description">
               Description
@@ -73,10 +79,11 @@ const AddCertificateForm = () => {
               onChange={(e) => setDescription(e.target.value)}
               className="w-full rounded-md border border-gray-600 bg-gray-900 px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               rows={4}
-              placeholder="Enter project description"
+              placeholder="Enter certificate description"
             />
           </div>
 
+          {/* Link */}
           <div>
             <label className="block mb-1 font-medium" htmlFor="link">
               Link
@@ -91,11 +98,12 @@ const AddCertificateForm = () => {
             />
           </div>
 
+          {/* Submit button */}
           <button
             type="submit"
             className="w-full bg-indigo-600 hover:bg-indigo-700 transition-colors py-2 rounded-md font-semibold text-white"
           >
-            Add Project
+            Add Certificate
           </button>
         </form>
       </div>

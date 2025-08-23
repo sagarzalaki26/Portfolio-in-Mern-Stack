@@ -115,6 +115,18 @@ mongoose.connect("mongodb://127.0.0.1:27017/employee")
   }
  })
 
+ //fetch
+ app.get('/certificate',async(req,res)=>{
+  try{
+    const certificate=await Certificatemodel.find().sort({createdAt:-1});
+    res.json(certificate);
+
+  }
+  catch(err){
+    console.log(err);
+  }
+ })
+
 
 
 app.listen(3001, () => {

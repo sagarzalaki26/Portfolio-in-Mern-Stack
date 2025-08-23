@@ -21,11 +21,11 @@ const AddProjectForm = () => {
         description,
         link,
       });
-            setMessage(response.data.message);
-            setTitle("");
-            setDescription('');
-            setLink('');
 
+      setMessage(response.data.message || "Project added successfully!");
+      setTitle("");
+      setDescription("");
+      setLink("");
     } catch (error) {
       setMessage("Error adding project.");
       console.error(error);
@@ -33,14 +33,18 @@ const AddProjectForm = () => {
   };
 
   return (
-    <div className="min-h-screen   bg-gray-950 px-4">
-      <div className="bg-gray-800 p-8 rounded-lg ml-10 mt-8 shadow-lg w-full max-w-md text-white">
-        <h2 className="text-2xl font-semibold mb-6 text-center">Add New Project</h2>
+    <div className="min-h-screen bg-gray-950 px-4 flex justify-center items-center">
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md text-white">
+        <h2 className="text-2xl font-semibold mb-6 text-center">
+          Add New Project
+        </h2>
 
         {message && (
           <p
             className={`mb-6 text-center ${
-              message.toLowerCase().includes("error") ? "text-red-400" : "text-green-400"
+              message.toLowerCase().includes("error")
+                ? "text-red-400"
+                : "text-green-400"
             }`}
           >
             {message}
@@ -48,6 +52,7 @@ const AddProjectForm = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Title */}
           <div>
             <label className="block mb-1 font-medium" htmlFor="title">
               Title <span className="text-red-500">*</span>
@@ -63,6 +68,7 @@ const AddProjectForm = () => {
             />
           </div>
 
+          {/* Description */}
           <div>
             <label className="block mb-1 font-medium" htmlFor="description">
               Description
@@ -77,6 +83,7 @@ const AddProjectForm = () => {
             />
           </div>
 
+          {/* Link */}
           <div>
             <label className="block mb-1 font-medium" htmlFor="link">
               Link
@@ -91,6 +98,7 @@ const AddProjectForm = () => {
             />
           </div>
 
+          {/* Submit button */}
           <button
             type="submit"
             className="w-full bg-indigo-600 hover:bg-indigo-700 transition-colors py-2 rounded-md font-semibold text-white"

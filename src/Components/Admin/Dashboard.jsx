@@ -6,7 +6,7 @@ import ManageCertificates from './ManageCertificates';
 import ManageSkills from './ManageSkills';
 import { FaBars } from 'react-icons/fa';
 
-export default function Dashboard({ onLogout }) {
+export default function Dashboard() {
     const [active, setActive] = useState('projects');
     const [showMobileMenu, setShowMobileMenu] = useState(false);
 
@@ -18,32 +18,39 @@ export default function Dashboard({ onLogout }) {
     };
 
     return (
-        <div id='' className="min-h-screen bg-gray-900 text-white">
+        <div className="min-h-screen bg-gray-900 text-white">
             {/* Topbar for mobile */}
             <header className="md:hidden flex items-center justify-between p-4 border-b border-gray-800">
                 <div className="flex items-center gap-3">
-                    <button onClick={() => setShowMobileMenu(s => !s)} className="p-2 bg-gray-800 rounded">
+                    <button
+                        onClick={() => setShowMobileMenu(s => !s)}
+                        className="p-2 bg-gray-800 rounded"
+                    >
                         <FaBars />
                     </button>
                     <h1 className="font-bold">Admin Panel</h1>
                 </div>
-                <div className="flex gap-2">
-                    <button onClick={onLogout} className="px-3 py-1 bg-red-600 rounded">Logout</button>
-                </div>
+
             </header>
 
             <div className="flex">
-                {/* Sidebar - visible on md+ */}
-                <Sidebar active={active} setActive={setActive} onLogout={onLogout} />
+                {/* Sidebar - desktop only */}
+                <div className="hidden md:block">
+                    <Sidebar active={active} setActive={setActive} />
+                </div>
 
                 {/* Mobile slideover menu */}
                 {showMobileMenu && (
                     <div
-                        className="md:hidden fixed inset-0 z-40 bg-black/60"
+                        className="md:hidden fixed inset-0 z-40 flex"
                         onClick={() => setShowMobileMenu(false)}
                     >
+                        {/* Overlay */}
+                        <div className="fixed inset-0 bg-black/60"></div>
+
+                        {/* Sidebar panel */}
                         <div
-                            className="absolute left-0 top-0 h-full w-64 bg-gray-900 p-4 overflow-y-auto"
+                            className="relative h-full w-64 bg-gray-900 p-4 overflow-y-auto transform transition-transform duration-300 ease-in-out translate-x-0"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <Sidebar
@@ -52,18 +59,18 @@ export default function Dashboard({ onLogout }) {
                                     setActive(id);
                                     setShowMobileMenu(false);
                                 }}
-                                onLogout={onLogout}
+
                             />
                         </div>
                     </div>
                 )}
 
-
-
                 {/* Main content */}
                 <main className="flex-1 p-6">
                     <div className="max-w-5xl mx-auto">
-                        {renderActive()}
+                        <div className="bg-gray-800 rounded-2xl shadow-lg p-6">
+                            {renderActive()}
+                        </div>
                     </div>
                 </main>
             </div>

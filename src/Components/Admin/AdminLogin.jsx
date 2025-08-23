@@ -7,11 +7,13 @@ function Signin() {
   const navigate=useNavigate();
   const {email,password}=form;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    axios.post('http://localhost:3001/login',{email,password})
-    .then(res=>{
+    try{
+    const res= await axios.post('http://localhost:3001/login',{email,password})
+   
       console.log(res);
+      
       if(res.data==="Success"){
             
         navigate('/Dashboard');
@@ -19,9 +21,13 @@ function Signin() {
       else{
         alert("Invalid Password");
       }
-      })
+      
+    }
+     catch(err){
+      console.error(err);
+     }
 
-    .catch(err=>console.log(err))
+  
   
   };
 
@@ -39,6 +45,7 @@ function Signin() {
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
           required
+          autoComplete="off"
         />
         <input
           type="password"
@@ -47,6 +54,7 @@ function Signin() {
           value={form.password}
           onChange={(e) => setForm({ ...form, password: e.target.value })}
           required
+          autoComplete="off"
         />
         <button className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600">
           Login
