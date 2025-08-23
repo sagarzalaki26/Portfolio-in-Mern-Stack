@@ -9,7 +9,7 @@ const Projects = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await axios.get('http://localhost:3001/projects');
+        const res = await axios.get('https://portfolio-in-react-omega.vercel.app/projects');
         setProjects(res.data);
       } catch (error) {
         console.error(error);

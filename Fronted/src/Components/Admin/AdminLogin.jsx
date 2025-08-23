@@ -10,7 +10,7 @@ function Signin() {
   const handleSubmit = async(e) => {
     e.preventDefault();
     try{
-    const res= await axios.post('http://localhost:3001/login',{email,password})
+    const res= await axios.post('https://portfolio-in-react-omega.vercel.app/login',{email,password})
    
       console.log(res);
       

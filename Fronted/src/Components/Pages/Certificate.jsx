@@ -9,7 +9,7 @@ const Certificates = () => {
     useEffect(() => {
         const fetchCertificate = async () => {
             try {
-                const res = await axios.get('http://localhost:3001/certificate');
+                const res = await axios.get('https://portfolio-in-react-omega.vercel.app/certificate');
                 setCertificate(res.data);
             } catch (err) {
                 console.log(err);

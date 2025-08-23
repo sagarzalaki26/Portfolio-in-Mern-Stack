@@ -18,7 +18,7 @@ const Skills = () => {
   useEffect(() => {
     const fetchSkills = async () => {
       try {
-        const res = await axios.get("http://localhost:3001/fetchskill");
+        const res = await axios.get("https://portfolio-in-react-omega.vercel.app/fetchskill");
         setSkills(res.data);
       } catch (error) {
         console.error(error);
