@@ -8,6 +8,7 @@ import {
 } from "react-icons/fa";
 import profileImg from "../../assets/Sagar.jpg";
 
+
 const Home = () => {
   return (
     <section
